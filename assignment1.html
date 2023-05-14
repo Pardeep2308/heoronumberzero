@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- <link rel="stylesheet" href="css/bootstrap.css"> -->
+  <style>
+    #box {
+      width: 50%;
+      margin: auto;
+      height: 300px;
+      border: 1px solid black;
+      background-color: lightcyan;
+      padding: 10px;
+    }
+
+    th,
+    td {
+      text-align: center;
+    }
+
+    th {
+      background-color: #c32143;
+      color: aliceblue;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="box">
+    Enter Name:
+    <input class="form-control" type="text" id="txtName">
+    Enter Phone:
+    <input class="form-control" type="text" id="txtPhone">
+    Enter Address:
+    <input class="form-control" type="text" id="txtAddress">
+
+    <button onclick="store()" class="btn btn-primary">Save</button>
+    <button onclick="display()" class="btn btn-warning">Display</button>
+    <button onclick="empty()" class="btn btn-warning">clear</button>
+    <button onclick="delMultiple()" class="btn btn-primary">Multi Delete</button>
+  </div>
+
+  <br>
+  <div class="container">
+    <table class="table">
+      <thead>
+        <!-- <th><input id="chk" onclick="set()" type="checkbox"> Select</th> -->
+        <th>Name</th>
+        <th>Phone</th>
+        <th>Address</th>
+        <!-- <th>Operation</th> -->
+      </thead>
+      <tbody id="bdy">
+
+
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    display()
+
+    
+    var arrName = []
+    var arrPhone = []
+    var arrAddress = []
+function empty(){
+  localStorage.clear()
+  display()
+}
+
+    function display() {
+      document.getElementById("bdy").innerHTML=""
+      arrName = JSON.parse(localStorage.getItem("first"))
+      arrPhone = JSON.parse(localStorage.getItem("second"))
+      arrAddress = JSON.parse(localStorage.getItem("third"))
+      for (i = 0; i <= arrName.length - 1; i++) {
+        row=          document.createElement("tr")
+        cell1=          document.createElement("td")
+        cell2=          document.createElement("td")
+        cell3=          document.createElement("td")
+
+        cell1.innerHTML=arrName[i]
+        cell2.innerHTML=arrPhone[i]
+        cell3.innerHTML=arrAddress[i]
+
+        row.append(cell1)
+        row.append(cell2)
+        row.append(cell3)
+
+        document.getElementById("bdy").append(row)
+      }
+    }
+    function store() {
+
+      arrName = JSON.parse(localStorage.getItem("first"))
+      arrPhone = JSON.parse(localStorage.getItem("second"))
+      arrAddress = JSON.parse(localStorage.getItem("third"))
+
+      if (arrName == null) {
+        arrName = []
+        arrPhone = []
+        arrAddress = []
+      }
+
+      name = document.getElementById("txtName").value
+      phone = document.getElementById("txtPhone").value
+      address = document.getElementById("txtAddress").value
+
+
+      arrName.push(name)
+      arrPhone.push(phone)
+      arrAddress.push(address)
+
+      localStorage.setItem("first", JSON.stringify(arrName))
+      localStorage.setItem("second", JSON.stringify(arrPhone))
+      localStorage.setItem("third", JSON.stringify(arrAddress))
+
+   display()
+    }
+    function delMultiple() {
+      body = document.getElementById("bdy")
+      rows = body.getElementsByTagName("tr")
+      for (i = 0; i <= rows.length - 1; i = i + 1) {
+        cells = rows[i].getElementsByTagName("td")
+        inputCheck = cells[0].getElementsByTagName("input")
+        if (inputCheck[0].checked == true) {
+          rows[i].style.display = "none"
+        }
+      }
+    }
+    function set() {
+      if (document.getElementById("chk").checked == true) {
+        body = document.getElementById("bdy")
+        rows = body.getElementsByTagName("tr")
+        for (i = 0; i <= rows.length - 1; i = i + 1) {
+          cells = rows[i].getElementsByTagName("td")
+          inputCheck = cells[0].getElementsByTagName("input")
+          inputCheck[0].checked = true
+        }
+      }
+      else {
+        body = document.getElementById("bdy")
+        rows = body.getElementsByTagName("tr")
+        for (i = 0; i <= rows.length - 1; i = i + 1) {
+          cells = rows[i].getElementsByTagName("td")
+          inputCheck = cells[0].getElementsByTagName("input")
+          inputCheck[0].checked = false
+        }
+      }
+    }
+    function save() {
+      name = document.getElementById("txtName").value
+      phone = document.getElementById("txtPhone").value
+      address = document.getElementById("txtAddress").value
+
+
+      row = document.createElement("tr")
+
+      cell = document.createElement("td")
+      cell1 = document.createElement("td")
+      cell2 = document.createElement("td")
+      cell3 = document.createElement("td")
+      cell4 = document.createElement("td")
+
+      cell1.innerHTML = name
+      cell2.innerHTML = phone
+      cell3.innerHTML = address
+
+      // create checkbox for ist cell
+      inputCheck = document.createElement("input")
+      inputCheck.setAttribute("type", "checkbox")
+      cell.append(inputCheck)
+
+
+      btnDelete = document.createElement("button")
+      btnDelete.innerHTML = "Delete"
+      btnDelete.setAttribute("onclick", "del(this)")
+      cell4.append(btnDelete)
+
+      row.append(cell)
+      row.append(cell1)
+      row.append(cell2)
+      row.append(cell3)
+      row.append(cell4)
+
+      document.getElementById("bdy").append(row)
+
+    }
+
+    function del(OButton) {
+      x = confirm("are you sure want to deletye????")
+      if (x == true) {
+        td = OButton.parentNode
+        row = td.parentNode
+        row.style.display = "none"
+      }
+      else {
+        alert("sorry")
+      }
+    }
+  </script>
+</body>
+
